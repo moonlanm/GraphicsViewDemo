@@ -123,6 +123,11 @@ void GraphicsView::mouseReleaseEvent(QMouseEvent* e)
 	return QGraphicsView::mouseReleaseEvent(e);
 }
 
+void GraphicsView::dragMoveEvent(QDragMoveEvent* event)
+{
+	event->accept();
+}
+
 void GraphicsView::dragEnterEvent(QDragEnterEvent* e)
 {
 	if (e->mimeData()->hasFormat("text/uri-list"))
