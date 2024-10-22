@@ -33,6 +33,10 @@ private slots:
 	void ZoomIn(int v);
 	void ZoomOut(int v);
 
+protected:
+	void keyPressEvent(QKeyEvent* e) override;
+	void keyReleaseEvent(QKeyEvent* e) override;
+
 private:
 	void InitConn();
 	void InitScene();

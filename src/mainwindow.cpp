@@ -18,7 +18,6 @@ MainWindow::MainWindow(QWidget* parent)
 	setMouseTracking(true);
 	InitScene();
 	InitConn();
-	installEventFilter(this);
 }
 
 MainWindow::~MainWindow() {
@@ -151,6 +150,22 @@ void MainWindow::ZoomIn(int v)
 void MainWindow::ZoomOut(int v)
 {
 	ui->scaleSlider->setValue(ui->scaleSlider->value() - 6);
+}
+
+void MainWindow::keyPressEvent(QKeyEvent* e)
+{
+	if (e->key() == Qt::Key_Alt)
+	{
+		ui->isMoveCheckBox->setChecked(true);
+	}
+}
+
+void MainWindow::keyReleaseEvent(QKeyEvent* e)
+{
+	if (e->key() == Qt::Key_Alt)
+	{
+		ui->isMoveCheckBox->setChecked(false);
+	}
 }
 
 

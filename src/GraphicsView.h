@@ -29,6 +29,8 @@ protected:
 	void mousePressEvent(QMouseEvent* e) override;
 	void mouseMoveEvent(QMouseEvent* e) override;
 	void mouseReleaseEvent(QMouseEvent* e) override;
+	void dragEnterEvent(QDragEnterEvent* e) override;
+	void dropEvent(QDropEvent* e) override;
 
 private:
 	friend class MainWindow;
