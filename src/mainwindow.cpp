@@ -104,6 +104,36 @@ void MainWindow::OnLeftRightBtnClicked()
 	}
 }
 
+void MainWindow::OnTurnLeftBtnClicked()
+{
+	auto items = ui->graphicsView->scene()->selectedItems();
+	for (auto& item : items)
+	{
+		auto rect = item->boundingRect();
+		auto center = rect.center();
+		QTransform matrix(item->matrix());
+		matrix.translate(center.x(), center.y());
+		matrix.rotate(-90);
+		matrix.translate(-center.x(), -center.y());
+		item->setTransform(matrix);
+	}
+}
+
+void MainWindow::OnTurnRightBtnClicked()
+{
+	auto items = ui->graphicsView->scene()->selectedItems();
+	for (auto& item : items)
+	{
+		auto rect = item->boundingRect();
+		auto center = rect.center();
+		QTransform matrix(item->matrix());
+		matrix.translate(center.x(), center.y());
+		matrix.rotate(90);
+		matrix.translate(-center.x(), -center.y());
+		item->setTransform(matrix);
+	}
+}
+
 void MainWindow::SetMatrix()
 {
 	qreal scale = qPow(qreal(2), (ui->scaleSlider->value() - 250) / qreal(50));
@@ -143,6 +173,8 @@ void MainWindow::InitConn()
 	connect(ui->imgButton, &QPushButton::clicked, this, &MainWindow::OnImgBtnClicked);
 	connect(ui->upDownBtn, &QPushButton::clicked, this, &MainWindow::OnUpDownBtnClicked);
 	connect(ui->leftRightBtn, &QPushButton::clicked, this, &MainWindow::OnLeftRightBtnClicked);
+	connect(ui->turnLeftBtn, &QPushButton::clicked, this, &MainWindow::OnTurnLeftBtnClicked);
+	connect(ui->turnRightBtn, &QPushButton::clicked, this, &MainWindow::OnTurnRightBtnClicked);
 
 	connect(ui->scaleSlider, &QSlider::valueChanged, this, &MainWindow::SetMatrix);
 	connect(ui->rotationSlider, &QSlider::valueChanged, this, &MainWindow::SetMatrix);

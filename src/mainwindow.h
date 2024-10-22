@@ -23,6 +23,8 @@ private slots:
 	void OnImgBtnClicked();
 	void OnUpDownBtnClicked();
 	void OnLeftRightBtnClicked();
+	void OnTurnLeftBtnClicked();
+	void OnTurnRightBtnClicked();
 
 	void SetMatrix();
 
