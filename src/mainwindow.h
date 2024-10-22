@@ -22,6 +22,7 @@ private slots:
 	void OnRectBtnClicked();
 	void OnLineBtnClicked();
 	void OnImgBtnClicked();
+	void OnPathBtnClicked();
 	void OnUpDownBtnClicked();
 	void OnLeftRightBtnClicked();
 	void OnTurnLeftBtnClicked();

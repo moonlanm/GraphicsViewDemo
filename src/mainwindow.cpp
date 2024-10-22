@@ -62,6 +62,11 @@ void MainWindow::OnImgBtnClicked()
 	ui->graphicsView->scene()->addItem(centerCircle);
 }
 
+void MainWindow::OnPathBtnClicked()
+{
+	ui->graphicsView->m_type = DrawType::Path;
+}
+
 void MainWindow::OnUpDownBtnClicked()
 {
 	auto items = ui->graphicsView->scene()->selectedItems();
@@ -160,6 +165,7 @@ void MainWindow::InitConn()
 	connect(ui->rectButton, &QPushButton::clicked, this, &MainWindow::OnRectBtnClicked);
 	connect(ui->lineButton, &QPushButton::clicked, this, &MainWindow::OnLineBtnClicked);
 	connect(ui->imgButton, &QPushButton::clicked, this, &MainWindow::OnImgBtnClicked);
+	connect(ui->pathButton, &QPushButton::clicked, this, &MainWindow::OnPathBtnClicked);
 	connect(ui->upDownBtn, &QPushButton::clicked, this, &MainWindow::OnUpDownBtnClicked);
 	connect(ui->leftRightBtn, &QPushButton::clicked, this, &MainWindow::OnLeftRightBtnClicked);
 	connect(ui->turnLeftBtn, &QPushButton::clicked, this, &MainWindow::OnTurnLeftBtnClicked);

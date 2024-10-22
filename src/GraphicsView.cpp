@@ -44,6 +44,7 @@ void GraphicsView::mousePressEvent(QMouseEvent* e)
 		m_curItem = scene()->addLine(QLine(rect.topLeft().toPoint(), rect.bottomRight().toPoint()));
 		break;
 	case DrawType::Path:
+		m_curItem = scene()->addPath(QPainterPath(rect.topLeft()));
 		break;
 	default:
 		break;
@@ -72,7 +73,16 @@ void GraphicsView::mouseMoveEvent(QMouseEvent* e)
 		((QGraphicsLineItem*)m_curItem)->setLine(QLine(rect.topLeft().toPoint(), rect.bottomRight().toPoint()));
 		break;
 	case DrawType::Path:
+	{
+		auto p = ((QGraphicsPathItem*)m_curItem)->path();
+		if (p.currentPosition() == QPoint(0, 0))
+		{
+			p.moveTo(mapToScene(localPos));
+		}
+		p.lineTo(mapToScene(localPos));
+		((QGraphicsPathItem*)m_curItem)->setPath(p);
 		break;
+	}
 	default:
 		break;
 	}
