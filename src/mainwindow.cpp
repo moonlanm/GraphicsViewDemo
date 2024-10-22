@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QGraphicsScene>
+#include <QGraphicsItem>
 #include <QGraphicsRectItem>
 #include <QGraphicsEllipseItem>
 #include <QGraphicsLineItem>
@@ -8,11 +9,13 @@
 #include <QFileDialog>
 #include <QtMath>
 #include <QWheelEvent>
-
+#include <QRectF>
+#include "GraphicsView.h"
 MainWindow::MainWindow(QWidget* parent)
 	: QMainWindow(parent),
 	ui(new Ui::MainWindow) {
 	ui->setupUi(this);
+	setMouseTracking(true);
 	InitScene();
 	InitConn();
 	installEventFilter(this);
@@ -24,26 +27,17 @@ MainWindow::~MainWindow() {
 
 void MainWindow::OnCircleBtnClicked()
 {
-	auto circle = new QGraphicsEllipseItem();
-	circle->setRect(0, 0, 10, 10);
-	circle->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
-	ui->graphicsView->scene()->addItem(circle);
+	ui->graphicsView->m_type = DrawType::Circle;
 }
 
 void MainWindow::OnRectBtnClicked()
 {
-	auto rect = new QGraphicsRectItem();
-	rect->setRect(0, 0, 10, 10);
-	rect->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
-	ui->graphicsView->scene()->addItem(rect);
+	ui->graphicsView->m_type = DrawType::Rect;
 }
 
 void MainWindow::OnLineBtnClicked()
 {
-	auto line = new QGraphicsLineItem();
-	line->setLine(QLine(0, 0, 10, 10));
-	line->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
-	ui->graphicsView->scene()->addItem(line);
+	ui->graphicsView->m_type = DrawType::Line;
 }
 
 void MainWindow::OnImgBtnClicked()
@@ -144,29 +138,24 @@ void MainWindow::SetMatrix()
 	ui->graphicsView->setTransform(matrix);
 }
 
-void MainWindow::wheelEvent(QWheelEvent* e)
+void MainWindow::ZoomIn(int v)
 {
-	if (e->modifiers() & Qt::ControlModifier) {
-		if (e->angleDelta().y() > 0)
-			ui->scaleSlider->setValue(ui->scaleSlider->value() + 6);
-		else
-			ui->scaleSlider->setValue(ui->scaleSlider->value() - 6);
-		ui->graphicsView->centerOn(e->position());
-		e->accept();
-	}
+	ui->scaleSlider->setValue(ui->scaleSlider->value() + 6);
 }
 
-bool MainWindow::eventFilter(QObject* o, QEvent* e)
+void MainWindow::ZoomOut(int v)
 {
-	if (o == ui->graphicsView)
-	{
-		return true;
-	}
-	return QMainWindow::eventFilter(o, e);
+	ui->scaleSlider->setValue(ui->scaleSlider->value() - 6);
 }
+
+
 
 void MainWindow::InitConn()
 {
+	connect(ui->graphicsView, &GraphicsView::ZoomOut, this, &MainWindow::ZoomOut);
+	connect(ui->graphicsView, &GraphicsView::ZoomIn, this, &MainWindow::ZoomIn);
+	connect(ui->isMoveCheckBox, &QCheckBox::stateChanged, ui->graphicsView, &GraphicsView::MoveStatusChange);
+
 	connect(ui->circleButton, &QPushButton::clicked, this, &MainWindow::OnCircleBtnClicked);
 	connect(ui->rectButton, &QPushButton::clicked, this, &MainWindow::OnRectBtnClicked);
 	connect(ui->lineButton, &QPushButton::clicked, this, &MainWindow::OnLineBtnClicked);
@@ -186,5 +175,6 @@ void MainWindow::InitScene()
 	auto center = ui->graphicsView->mapToScene(0, 0);
 	scene->addEllipse(QRect(center.x(), center.y(), 100, 100), QPen(Qt::red), QBrush(Qt::red));
 	ui->graphicsView->setScene(scene);
+	ui->graphicsView->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 }
 

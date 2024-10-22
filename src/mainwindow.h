@@ -7,6 +7,7 @@ namespace Ui {
 	class MainWindow;
 }
 
+class QGraphicsItem;
 class MainWindow : public QMainWindow
 {
 	Q_OBJECT
@@ -28,9 +29,8 @@ private slots:
 
 	void SetMatrix();
 
-protected:
-	void wheelEvent(QWheelEvent*) override;
-	bool eventFilter(QObject* o, QEvent* e) override;
+	void ZoomIn(int v);
+	void ZoomOut(int v);
 
 private:
 	void InitConn();
@@ -38,8 +38,7 @@ private:
 
 private:
 	Ui::MainWindow* ui;
-	bool m_upDown = false;
-	bool m_leftRight = false;
+
 };
 
 #endif // MAINWINDOW_H
